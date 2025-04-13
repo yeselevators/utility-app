@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lift Quote Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl">
+    <h2 class="text-3xl font-bold mb-6 text-center">Project Information Form</h2>
+    <form id="client-form" class="space-y-8">
+
+      <!-- Client Information -->
+      <div>
+        <h3 class="text-xl font-semibold mb-2 border-b pb-1">Client Information</h3>
+        <input required name="client_name" placeholder="Client Name" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input required name="client_address" placeholder="Client Address" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input required name="client_city" placeholder="Client City" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input required name="site_name" placeholder="Site Name" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <select required name="type" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Select Type</option>
+          <option>Passenger</option>
+          <option>Car</option>
+          <option>Hospital</option>
+          <option>Goods</option>
+        </select>
+      </div>
+
+      <!-- Technical Specs -->
+      <div>
+        <h3 class="text-xl font-semibold mb-2 border-b pb-1">Technical Specs</h3>
+        <input required type="number" name="capacity" id="capacity" placeholder="Capacity (kg)" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input required type="text" name="speed" placeholder="Speed (m/s)" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input readonly type="number" name="weight" id="weight" placeholder="Weight (auto)" class="w-full border bg-gray-100 rounded-xl px-4 py-2 mb-3"/>
+        <input required name="floors" placeholder="Floors" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input required type="number" name="stops" placeholder="Stops" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input required type="number" name="opening" placeholder="Openings" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <div class="grid grid-cols-3 gap-4">
+          <input required type="number" name="width" placeholder="Shaft Width (mm)" class="w-full border rounded-xl px-4 py-2"/>
+          <input required type="number" name="depth" placeholder="Shaft Depth (mm)" class="w-full border rounded-xl px-4 py-2"/>
+          <input required type="number" name="height" placeholder="Shaft Height (mm)" class="w-full border rounded-xl px-4 py-2"/>
+        </div>
+      </div>
+
+      <!-- Car Details -->
+      <div>
+        <h3 class="text-xl font-semibold mb-2 border-b pb-1">Car Details</h3>
+        <input required type="number" name="car_opening" placeholder="Car Opening (mm)" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <select required name="door_type" class="w-full border rounded-xl px-4 py-2 mb-3">
+          <option value="">Select Door Type</option>
+          <option>M.S center</option>
+          <option>M.S telescopic</option>
+          <option>S.S center</option>
+          <option>S.S telescopic</option>
+        </select>
+        <select required name="cabin_type" class="w-full border rounded-xl px-4 py-2 mb-3">
+          <option value="">Select Cabin Type</option>
+          <option>M.S powder coated</option>
+          <option>S.S hairline finish</option>
+          <option>S.S decorative</option>
+        </select>
+        <input required type="number" name="car_width" placeholder="Car Width (mm)" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input required type="number" name="car_depth" placeholder="Car Depth (mm)" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+      </div>
+
+      <!-- Quote Section -->
+      <div>
+        <h3 class="text-xl font-semibold mb-2 border-b pb-1">Quote</h3>
+        <input required type="number" name="rate" id="rate" placeholder="Rate (₹)" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input required type="number" name="quantity" id="quantity" placeholder="Quantity" class="w-full border rounded-xl px-4 py-2 mb-3"/>
+        <input readonly type="text" name="amount" id="amount" placeholder="Total Amount (₹)" class="w-full border bg-gray-100 rounded-xl px-4 py-2 mb-3"/>
+        <input readonly type="text" name="amount_words" id="amount_words" placeholder="Amount in Words" class="w-full border bg-gray-100 rounded-xl px-4 py-2 mb-3"/>
+        <input required type="number" name="installation_period" placeholder="Installation Period (in days)" class="w-full border rounded-xl px-4 py-2"/>
+      </div>
+
+      <!-- Submit -->
+      <div class="text-center pt-4">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition">Generate DOC</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const capacityInput = document.getElementById('capacity');
+    const weightInput = document.getElementById('weight');
+    const rateInput = document.getElementById('rate');
+    const qtyInput = document.getElementById('quantity');
+    const totalInput = document.getElementById('amount');
+    const wordsInput = document.getElementById('amount_words');
+
+    capacityInput.addEventListener('input', () => {
+      const capacity = parseInt(capacityInput.value) || 0;
+      weightInput.value = capacity * 68;
+    });
+
+    function formatIndianNumber(num) {
+      return new Intl.NumberFormat('en-IN').format(num);
+    }
+
+    function numberToWords(num) {
+      const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+        'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+      const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+      const convert = (n) => {
+        if (n < 20) return a[n];
+        if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '');
+        if (n < 1000) return a[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' and ' + convert(n % 100) : '');
+        if (n < 100000) return convert(Math.floor(n / 1000)) + ' Thousand' + (n % 1000 ? ' ' + convert(n % 1000) : '');
+        if (n < 10000000) return convert(Math.floor(n / 100000)) + ' Lakh' + (n % 100000 ? ' ' + convert(n % 100000) : '');
+        return convert(Math.floor(n / 10000000)) + ' Crore' + (n % 10000000 ? ' ' + convert(n % 10000000) : '');
+      };
+
+      return convert(num).toUpperCase() + ' RUPEES ONLY';
+    }
+
+    function calculateAmount() {
+      const rate = parseInt(rateInput.value) || 0;
+      const qty = parseInt(qtyInput.value) || 0;
+      const total = rate * qty;
+      totalInput.value = formatIndianNumber(total);
+      wordsInput.value = numberToWords(total);
+    }
+
+    rateInput.addEventListener('input', calculateAmount);
+    qtyInput.addEventListener('input', calculateAmount);
+
+    // Submit
+    document.getElementById('client-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const data = new FormData(this);
+      const formObject = Object.fromEntries(data.entries());
+
+      fetch('/generate-doc', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formObject)
+      })
+      .then(res => {
+        const contentDisposition = res.headers.get('Content-Disposition');
+        const filenameMatch = contentDisposition && contentDisposition.match(/filename="?(.+)"?/);
+        const filename = filenameMatch ? filenameMatch[1] : "proposal.docx";
+        return res.blob().then(blob => ({ blob, filename }));
+      })
+      .then(({ blob, filename }) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+      });
+    });
+  </script>
+</body>
+</html>
